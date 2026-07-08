@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="el">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surprise!</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { 
+            width: 100%; height: 100%; 
+            font-family: 'Arial', sans-serif; 
+            background-color: #ffe6e6; 
+            overflow: hidden;
+            display: flex; justify-content: center; align-items: center;
+        }
+        .slide {
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%; height: 100%;
+            text-align: center;
+            padding: 20px;
+            position: absolute;
+            top: 0; left: 0;
+        }
+        .active { display: flex; }
+        
+        h1 { font-size: 2.5rem; color: #cc0052; margin-bottom: 30px; user-select: none; }
+        
+        .btn-container {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            width: 100%; height: 150px;
+        }
+        button {
+            padding: 15px 40px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: background 0.3s, transform 0.1s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .btn-yes { background-color: #4caf50; color: white; position: absolute; }
+        .btn-no { background-color: #f44336; color: white; z-index: 10; }
+        
+        .grid-options {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 500px;
+            width: 100%;
+        }
+        .grid-options button { position: static; width: 100%; }
+        .fade-out { opacity: 0; pointer-events: none; transition: opacity 0.5s ease; }
+        
+        .clickable-screen { cursor: pointer; }
+        
+        /* Slide 5 Custom Background styling */
+        #slide5 {
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+        #slide5 h1 {
+            background: rgba(255, 255, 255, 0.8);
+            padding: 20px;
+            border-radius: 15px;
+        }
+        img { max-width: 80%; max-height: 60vh; border-radius: 15px; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <!-- SLIDE 1: The Request -->
+    <div id="slide1" class="slide active">
+        <h1>ΔΕΝ ΕΧΩ ΙΔΕΑ ΑΠΛΑ ΠΑΤΑ ΝΑΙ</h1>
+        <div class="btn-container" id="container1">
+            <button class="btn-yes" id="btnYes">ΝΑΙ</button>
+            <button class="btn-no" onclick="nextSlide(2)">ΟΧΙ</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 2: Why Click No -->
+    <div id="slide2" class="slide clickable-screen" onclick="nextSlide(3)">
+        <h1>ΓΙΑΤΙ ΠΑΤΗΣΕΣ ΟΧΙ :(</h1>
+    </div>
+
+    <!-- SLIDE 3: Custom GIF -->
+    <div id="slide3" class="slide clickable-screen" onclick="nextSlide(4)">
+        <h1>...</h1>
+        <!-- REPLACE THE URL BELOW WITH YOUR GIF LINK -->
+        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGs2eW15c2h0eHI0OXIxOXJrZjVhbWU4bnVuOXNnczlkNmxjaWFtMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ILx3tjWgaP0cjUf0Wx/giphy.gif" alt="Your GIF">
+    </div>
+
+    <!-- SLIDE 4: How Are You? -->
+    <div id="slide4" class="slide">
+        <h1>ΠΩΣ ΕΙΣΑΙ;</h1>
+        <div class="grid-options">
+            <button onclick="disappear(this)">ΚΑΛΑ</button>
+            <button onclick="disappear(this)">ΠΟΛΥ ΚΑΛΑ</button>
+            <button onclick="disappear(this)">ΕΞΑΙΡΕΤΑ</button>
+            <button onclick="goToFinalSlide()">ΦΡΥΓΑΝΙΑ</button>
+        </div>
+    </div>
+
+    <!-- SLIDE 5: The Grand Finale (Background + Music) -->
+    <!-- REPLACE THE BACKGROUND IMAGE URL BELOW -->
+    <div id="slide5" class="slide" style="background-image: url('https://unsplash.com');">
+        <h1>❤️ Είσαι Φρυγανιά! ❤️</h1>
+        
+        <!-- REPLACE THE AUDIO URL BELOW WITH YOUR SONG LINK -->
+        <audio id="bgMusic" loop>
+            <source src="https://soundhelix.com" type="audio/mpeg">
+        </audio>
+    </div>
+
+    <script>
+        const btnYes = document.getElementById('btnYes');
+        const container1 = document.getElementById('container1');
+
+        // Function to move the "YES" button randomly within the container area
+        function teleportYes() {
+            const containerWidth = container1.clientWidth;
+            const containerHeight = container1.clientHeight;
+            const btnWidth = btnYes.clientWidth;
+            const btnHeight = btnYes.clientHeight;
+
+            // Calculate random positions ensuring the button stays inside the zone
+            const randomX = Math.floor(Math.random() * (containerWidth - btnWidth));
+            const randomY = Math.floor(Math.random() * (containerHeight - btnHeight));
+
+            btnYes.style.left = randomX + 'px';
+            btnYes.style.top = randomY + 'px';
+        }
+
+        // Teleport triggers for both Desktop (mouseover) and Mobile (touchstart)
+        btnYes.addEventListener('mouseover', teleportYes);
+        btnYes.addEventListener('touchstart', function(e) {
+            e.preventDefault(); // Prevents clicking action on mobile
+            teleportYes();
+        });
+
+        // Navigation core engine
+        function nextSlide(slideNumber) {
+            document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
+            document.getElementById('slide' + slideNumber).classList.add('active');
+        }
+
+        // Disappearing logic for the 3 good choices
+        function disappear(element) {
+            element.classList.add('fade-out');
+        }
+
+        // Final transition trigger that launches the audio loop
+        function goToFinalSlide() {
+            nextSlide(5);
+            const music = document.getElementById('bgMusic');
+            music.play().catch(error => {
+                console.log("Audio autoplay restriction hit. Interaction required.");
+            });
+        }
+    </script>
+</body>
+</html>
