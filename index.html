@@ -111,12 +111,12 @@
 
     <!-- SLIDE 5: The Grand Finale (Background + Music) -->
     <!-- REPLACE THE BACKGROUND IMAGE URL BELOW -->
-    <div id="slide5" class="slide" style="background-image: url('https://unsplash.com');">
+    <div id="slide5" class="slide" style="background-image: url('ΑΟΤ ΦΡΥΓΑΝΙΑ.png');">
         <h1>❤️ Είσαι Φρυγανιά! ❤️</h1>
         
         <!-- REPLACE THE AUDIO URL BELOW WITH YOUR SONG LINK -->
         <audio id="bgMusic" loop>
-            <source src="https://soundhelix.com" type="audio/mpeg">
+            <source src="IC3PEAK, ZillaKami - TRRST (SPOTISAVER).mp3" type="audio/mpeg">
         </audio>
     </div>
 
@@ -157,13 +157,17 @@
             element.classList.add('fade-out');
         }
 
-        // Final transition trigger that launches the audio loop
+                // Final transition trigger that launches the audio loop with a 4-second delay
         function goToFinalSlide() {
             nextSlide(5);
-            const music = document.getElementById('bgMusic');
-            music.play().catch(error => {
-                console.log("Audio autoplay restriction hit. Interaction required.");
-            });
+            
+            // Wait 4000 milliseconds (4 seconds) before playing the music
+            setTimeout(function() {
+                const music = document.getElementById('bgMusic');
+                music.play().catch(error => {
+                    console.log("Audio autoplay restriction hit. Interaction required.");
+                });
+            }, 4000);
         }
     </script>
 </body>
