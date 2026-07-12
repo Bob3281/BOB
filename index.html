@@ -59,21 +59,23 @@
         .grid-options button { position: static; width: 100%; }
         .fade-out { display: none !important; }
         
+        /* Αρχικά κρυφό το 4ο κουμπί */
+        #btnFrygania { display: none; }
+        
         .clickable-screen { cursor: pointer; }
         
-        /* Slide 5 Custom Background styling */
-      
-    #slide5 {
-    background-color: #0066cc !important;
-    background-image: url('ΑΟΤ ΦΡΥΓΑΝΙΑ (2).png');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100vw !important;
-    height: 100vh !important;
-    max-width: 100vw !important;
-    max-height: 100vh !important;
-}
+        /* Slide 5 με θερμότερο τόνο μπλε (#1a5276) */
+        #slide5 {
+            background-color: #1a5276 !important;
+            background-image: url('ΑΟΤ ΦΡΥΓΑΝΙΑ (2).png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            width: 100vw !important;
+            height: 100vh !important;
+            max-width: 100vw !important;
+            max-height: 100vh !important;
+        }
 
         #slide5 h1 {
             background: rgba(255, 255, 255, 0.8);
@@ -102,7 +104,6 @@
     <!-- SLIDE 3: Custom GIF -->
     <div id="slide3" class="slide clickable-screen" onclick="nextSlide(4)">
         <h1>.</h1>
-        <!-- REPLACE THE URL BELOW WITH YOUR GIF LINK -->
         <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGs2eW15c2h0eHI0OXIxOXJrZjVhbWU4bnVuOXNnczlkNmxjaWFtMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ILx3tjWgaP0cjUf0Wx/giphy.gif" alt="Your GIF">
     </div>
 
@@ -110,19 +111,15 @@
     <div id="slide4" class="slide">
         <h1>ΠΩΣ ΕΙΣΑΙ;</h1>
         <div class="grid-options">
-            <button onclick="disappear(this)">ΚΑΛΑ</button>
-            <button onclick="disappear(this)">ΠΟΛΥ ΚΑΛΑ</button>
-            <button onclick="disappear(this)">ΕΞΑΙΡΕΤΑ</button>
-            <button onclick="goToFinalSlide()">ΦΡΥΓΑΝΙΑ</button>
+            <button class="opt-btn" onclick="disappear(this)">ΚΑΛΑ</button>
+            <button class="opt-btn" onclick="disappear(this)">ΠΟΛΥ ΚΑΛΑ</button>
+            <button class="opt-btn" onclick="disappear(this)">ΕΞΑΙΡΕΤΑ</button>
+            <button id="btnFrygania" onclick="goToFinalSlide()">ΦΡΥΓΑΝΙΑ</button>
         </div>
     </div>
 
     <!-- SLIDE 5: The Grand Finale (Background + Music) -->
-    <!-- REPLACE THE BACKGROUND IMAGE URL BELOW -->
-    <div id="slide5" class="slide" style="background-image: url('ΑΟΤ ΦΡΥΓΑΝΙΑ (2).png');">
-       
-        
-        <!-- REPLACE THE AUDIO URL BELOW WITH YOUR SONG LINK -->
+    <div id="slide5" class="slide">
         <audio id="bgMusic" loop>
             <source src="IC3PEAK, ZillaKami - TRRST (SPOTISAVER).mp3" type="audio/mpeg">
         </audio>
@@ -131,15 +128,14 @@
     <script>
         const btnYes = document.getElementById('btnYes');
         const container1 = document.getElementById('container1');
+        let clickedCount = 0;
 
-        // Function to move the "YES" button randomly within the container area
         function teleportYes() {
             const containerWidth = container1.clientWidth;
             const containerHeight = container1.clientHeight;
             const btnWidth = btnYes.clientWidth;
             const btnHeight = btnYes.clientHeight;
 
-            // Calculate random positions ensuring the button stays inside the zone
             const randomX = Math.floor(Math.random() * (containerWidth - btnWidth));
             const randomY = Math.floor(Math.random() * (containerHeight - btnHeight));
 
@@ -147,29 +143,30 @@
             btnYes.style.top = randomY + 'px';
         }
 
-        // Teleport triggers for both Desktop (mouseover) and Mobile (touchstart)
         btnYes.addEventListener('mouseover', teleportYes);
         btnYes.addEventListener('touchstart', function(e) {
-            e.preventDefault(); // Prevents clicking action on mobile
+            e.preventDefault();
             teleportYes();
         });
 
-        // Navigation core engine
         function nextSlide(slideNumber) {
             document.querySelectorAll('.slide').forEach(s => s.classList.remove('active'));
             document.getElementById('slide' + slideNumber).classList.add('active');
         }
 
-        // Disappearing logic for the 3 good choices
+        // Έλεγχος αν πατήθηκαν και οι 3 επιλογές για να εμφανιστεί η ΦΡΥΓΑΝΙΑ
         function disappear(element) {
             element.classList.add('fade-out');
+            clickedCount++;
+            
+            if (clickedCount === 3) {
+                document.getElementById('btnFrygania').style.display = 'block';
+            }
         }
 
-                // Final transition trigger that launches the audio loop with a 4-second delay
         function goToFinalSlide() {
             nextSlide(5);
             
-            // Wait 4000 milliseconds (4 seconds) before playing the music
             setTimeout(function() {
                 const music = document.getElementById('bgMusic');
                 music.play().catch(error => {
@@ -180,4 +177,3 @@
     </script>
 </body>   
 </html>
-  
