@@ -59,8 +59,15 @@
         .grid-options button { position: static; width: 100%; }
         .fade-out { display: none !important; }
         
-        /* Αρχικά κρυφό το 4ο κουμπί */
-        #btnFrygania { display: none; }
+        /* 4ο κουμπί: Αρχικά κρυφό, κεντραρισμένο και bold */
+        #btnFrygania { 
+            display: none; 
+            grid-column: span 2; 
+            justify-self: center; 
+            font-weight: 900 !important; 
+            width: auto !important; 
+            padding: 15px 60px;
+        }
         
         .clickable-screen { cursor: pointer; }
         
@@ -104,7 +111,7 @@
     <!-- SLIDE 3: Custom GIF -->
     <div id="slide3" class="slide clickable-screen" onclick="nextSlide(4)">
         <h1>.</h1>
-        <img src="https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMGs2eW15c2h0eHI0OXIxOXJrZjVhbWU4bnVuOXNnczlkNmxjaWFtMiZlcD12MV9naWZzX3NlYXJjaCZjdD1n/ILx3tjWgaP0cjUf0Wx/giphy.gif" alt="Your GIF">
+        <img src="https://giphy.com" alt="Your GIF">
     </div>
 
     <!-- SLIDE 4: How Are You? -->
@@ -154,7 +161,6 @@
             document.getElementById('slide' + slideNumber).classList.add('active');
         }
 
-        // Έλεγχος αν πατήθηκαν και οι 3 επιλογές για να εμφανιστεί η ΦΡΥΓΑΝΙΑ
         function disappear(element) {
             element.classList.add('fade-out');
             clickedCount++;
